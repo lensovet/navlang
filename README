@@ -1,0 +1,14 @@
+INSTALLATION:
+Extract all the files into one directory and open index.html in Firefox 3+ or Safari 4+ (should work in earlier versions; IE currently untested).
+
+RUNNING CODE:
+After opening index.html, paste code into the text box and tab/click out of it. The results will be output below. Note that the lj/last.fm/fb navigation bar at the bottom of the page is static and is not affected by any inputs.
+
+FILES:
+-parser.js: parses input and generates AST for interpreter
+-treewalkers.js: walks the generated AST and creates the CSS/JS/HTML markup corresponding to it. Also contains methods to reposition submenus at runtime as necessary.
+-creator.js: convenience methods to generate the navbar for a given input string
+-DEMO: contains three demos highlighting the language's features.
+
+A NOTE ON MORE TYPICAL USAGE:
+The demo page provides a very convenient and cool way to try out the code and play with it. However, in actual usage, this is obviously impractical. One example of *actual* usage of the language in creating a nav bar is shown in index.html with the static navbar at the bottom of the page. Note that it is generated in <body>'s unload method. Alternatively, separate JavaScript functions could be created and placed in separate files and then imported and invoked "blindly", allowing website managers to have a single .js file holding all of their navigation bars.

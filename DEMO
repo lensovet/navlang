@@ -1,0 +1,35 @@
+{ color: #82c753; background: #6d6d6d; text-decoration: none; padding: 0.35em 0.5em;
+	hover: { background: white; text-decoration: underline; };
+layout: vertical; layout-width: 10em; }
+*One | /one.htm
+{ color: #84b6d5; marker: &#9758; }
+**Two | /two.htm
+*Fun | /fun/
+{ background: white; }
+**Funtwooverride | /override
+***Third level | /goodtimes.htm
+{ background: gray; }
+****Fourth | /four
+*Oneback | /oneback
+{ marker: dot; }
+**Choo choo | /choo
+***Overrides | /woo
+****Gray | /gray
+
+{ layout: horizontal; }
+*About us
+{ direction: below; }
+**Directors | /directors
+**Developers | /developers
+**Users | /users
+*Support
+**FAQs | /faq
+**Knowledge Base | /kb
+
+{ layout: vertical; layout-width: 200px; element-style: rounded-tab; border: yellow thin solid; hover: { border: red thin solid; }; }
+*Roadmap | /roadmap.html
+*Projects | /projects
+*Coding | /developer
+{ direction: right; marker: dot; }
+**Module Owners | /about/owners.html
+**More modules | /owners

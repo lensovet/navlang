@@ -1,0 +1,146 @@
+/~
+    This is a four-function calculator, where precedences
+    are defined via associativity definitions of tokens.
+
+    IMPORTANT: The Warnings coming up when invoking JS/CC
+               are coming from the grammar, and are resolved
+               in order to the precedences and associativity
+               information passed to each token.
+~/
+
+
+/~ --- Token definitions --- ~/
+
+/~ Characters to be ignored ~/
+!   ' |\t|\n' ;
+
+/~ Non-associative tokens ~/
+    '{'
+    '}'
+    ':'
+    ';'
+    '\|'
+    'hover'
+    'layout'
+    'marker'
+    'direction'
+    'element-style'
+    'layout-width'
+    'horizontal'
+    'vertical'
+    'none'
+    'dot'
+    'same'
+    'below'
+    'above'
+    'left'
+    'right'
+    'rounded-tab'
+    'regular'
+    'em'
+    'ex'
+    'px'
+    'in'
+    'cm'
+    'mm'
+    'pt'
+    'pc'
+    '%'
+    '&#[0-9]+'              ENT_NUM
+    '&[a-zA-Z]+'            ENT_NAME
+    '[0-9]+'                INT
+    '[0-9]+(em|ex|px|in|cm|mm|pt|pc|%)'  LW_KEY
+    '\*+'			        STARS
+    '[^ \t\n;:\|\*{}%]+'     STR_TOK
+    ;
+
+
+##
+
+/~ --- Grammar specification --- ~/
+
+p:      eList                                      [* gTemp = %1 *]
+        ;
+
+eList:   e                                         [* %% = new Array(%1); *]
+         | eList e                                 [* %1.push(%2); %% = %1 *]
+         ;
+
+e:     '{' attribList '}'                          [* %% = ['format', %2]; *]
+       | STARS WORD_LIST                           [* %% = ['item', %1.length, %2]; *]
+       | STARS WORD_LIST '|' WORD                  [* %% = ['item', %1.length, %2, %4]; *]
+       ;
+
+attribList:    attrib                              [* %% =  new Array(); %%[%1[0]] = %1[1]; *]
+               | attribList attrib                 [* %% =  %1; %1[%2[0]] = %2[1]; *]
+               ;
+
+attrib:    WORD ':' attribVals ';'                 [* %% = [%1, %3]; *]
+           | 'hover' ':' '{' attribList '}' ';'    [* %% = [%1, %4]; *]
+           | 'layout' ':' layoutAnswers ';'        [* %% = [%1, %3]; *]
+           | 'marker' ':' markerAnswers ';'        [* %% = [%1, %3]; *]
+           | 'direction' ':' directionAnswers ';'  [* %% = [%1, %3]; *]
+           | 'element-style' ':' elStyleAnswers ';'[* %% = [%1, %3]; *]
+           | 'layout-width' ':' INT L_UNIT ';'     [* %% = [%1, %3+%4] *] 
+           | 'layout-width' ':' LW_KEY ';'         [* %% = [%1, %3] *] 
+           ;
+
+attribVals:   WORD                                 [* %% = new Array(%1); *]
+              | attribVals WORD                    [* %1.push(%2); %% = %1; *]
+              ;              
+              
+layoutAnswers: 'horizontal'
+               | 'vertical'
+               ;
+
+markerAnswers: 'none'
+               | 'dot'
+               | ENT_NUM
+               | ENT_NAME
+               ;
+               
+directionAnswers:    'same'
+                     | 'below'
+                     | 'above'
+                     | 'left'
+                     | 'right'
+                     ;
+                     
+elStyleAnswers:      'rounded-tab'
+                     | 'regular'
+                     ;
+
+L_UNIT:    'em'
+           | 'ex'
+           | 'px'
+           | 'in'
+           | 'cm'
+           | 'mm'
+           | 'pt'
+           | 'pc'
+           | '%'
+           ;
+
+               
+WORD:    STR_TOK
+        | ENT_NUM
+        | ENT_NAME
+        | INT
+        | L_UNIT
+        | LW_KEY
+        | 'horizontal'
+        | 'vertical'
+        | 'none'
+        | 'dot'
+        | 'same'
+        | 'below'
+        | 'above'
+        | 'left'
+        | 'right'
+        | 'rounded-tab'
+        | 'regular'
+        ;
+
+WORD_LIST:    WORD
+              | WORD_LIST WORD                     [* %% = %1 + " " + %2; *]
+              ;
